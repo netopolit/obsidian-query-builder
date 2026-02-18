@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "obsidian-query-builder",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Visual query builder for Obsidian search — build complex queries without memorizing syntax",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

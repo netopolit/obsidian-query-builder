@@ -4,5 +4,6 @@
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Visual query builder for Obsidian search — build complex queries without memorizing syntax",
+	"author": "netopolit",
 	"isDesktopOnly": false
 }
