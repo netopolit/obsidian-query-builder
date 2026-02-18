@@ -52,7 +52,3 @@ export function getField(id: QueryFieldId): FieldDefinition {
 	if (!field) throw new Error(`Unknown field: ${id}`);
 	return field;
 }
-
-export function getFieldByPrefix(prefix: string): FieldDefinition | undefined {
-	return FIELDS.find(f => f.prefix === prefix && f.prefix !== "");
-}
