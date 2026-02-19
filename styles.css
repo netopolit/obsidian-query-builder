@@ -77,28 +77,15 @@
 	font-weight: 500;
 }
 
-.qb-toggle-btn--active {
+.qb-toggle-btn.qb-toggle-btn--active {
 	background: var(--interactive-accent);
 	color: var(--text-on-accent);
 }
 
-/* NOT Toggle */
-
-.qb-not-toggle {
-	font-size: var(--font-ui-smaller);
-	color: var(--text-muted);
-	background: transparent;
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius-s);
-	padding: 2px 8px;
-	cursor: pointer;
+.qb-connector-toggle .qb-toggle-btn + .qb-toggle-btn {
+	border-left: 1px solid var(--background-modifier-border);
 }
 
-.qb-not-toggle--active {
-	background: var(--background-modifier-error);
-	color: var(--text-on-accent);
-	border-color: var(--background-modifier-error);
-}
 
 /* Condition Row */
 
@@ -190,7 +177,7 @@
 	font-weight: 600;
 }
 
-.qb-case-toggle--active {
+.qb-case-toggle.qb-case-toggle--active {
 	background: var(--interactive-accent);
 	color: var(--text-on-accent);
 	border-color: var(--interactive-accent);

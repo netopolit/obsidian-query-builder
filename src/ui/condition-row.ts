@@ -6,6 +6,7 @@ import { TagSuggest } from "./tag-suggest";
 
 export interface ConditionRowCallbacks {
 	onChange: () => void;
+	onValueChange: () => void;
 	onRemove: (id: string) => void;
 }
 
@@ -16,6 +17,12 @@ export function renderConditionRow(
 	app: App,
 ): HTMLElement {
 	const row = parentEl.createDiv({ cls: "qb-condition-row" });
+
+	// Validate operator is allowed for this field (fixes parsed queries with unsupported operators)
+	const initialField = getField(condition.field);
+	if (!initialField.allowedOperators.includes(condition.operator)) {
+		condition.operator = initialField.allowedOperators[0] as OperatorId;
+	}
 
 	// Field dropdown
 	const fieldSelect = row.createEl("select", { cls: "qb-select qb-field-select" });
@@ -44,7 +51,7 @@ export function renderConditionRow(
 		propInput.value = condition.propertyName;
 		propInput.addEventListener("input", () => {
 			condition.propertyName = propInput.value;
-			callbacks.onChange();
+			callbacks.onValueChange();
 		});
 	}
 
@@ -71,7 +78,7 @@ export function renderConditionRow(
 		valueInput.value = condition.value;
 		valueInput.addEventListener("input", () => {
 			condition.value = valueInput.value;
-			callbacks.onChange();
+			callbacks.onValueChange();
 		});
 
 		if (condition.field === QueryFieldId.Tag) {

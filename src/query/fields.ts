@@ -16,6 +16,12 @@ const textOperators: OperatorId[] = [
 	OperatorId.MatchesRegex,
 ];
 
+const tagOperators: OperatorId[] = [
+	OperatorId.Contains,
+	OperatorId.DoesNotContain,
+	OperatorId.MatchesRegex,
+];
+
 const lineOperators: OperatorId[] = [
 	OperatorId.Contains,
 	OperatorId.DoesNotContain,
@@ -37,7 +43,7 @@ export const FIELDS: FieldDefinition[] = [
 	{ id: QueryFieldId.FileName, label: "File name", prefix: "file:", allowedOperators: textOperators, hasPropertyName: false },
 	{ id: QueryFieldId.FilePath, label: "File path", prefix: "path:", allowedOperators: textOperators, hasPropertyName: false },
 	{ id: QueryFieldId.Content, label: "Content", prefix: "content:", allowedOperators: textOperators, hasPropertyName: false },
-	{ id: QueryFieldId.Tag, label: "Tag", prefix: "tag:", allowedOperators: textOperators, hasPropertyName: false },
+	{ id: QueryFieldId.Tag, label: "Tag", prefix: "tag:", allowedOperators: tagOperators, hasPropertyName: false },
 	{ id: QueryFieldId.Line, label: "Line", prefix: "line:", allowedOperators: lineOperators, hasPropertyName: false },
 	{ id: QueryFieldId.Block, label: "Block", prefix: "block:", allowedOperators: lineOperators, hasPropertyName: false },
 	{ id: QueryFieldId.Section, label: "Section", prefix: "section:", allowedOperators: lineOperators, hasPropertyName: false },

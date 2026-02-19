@@ -17,6 +17,9 @@ function serializeCondition(condition: Condition): string {
 	let valuePart: string;
 	if (operator.regex) {
 		valuePart = `/${condition.value}/`;
+	} else if (condition.field === QueryFieldId.Tag) {
+		// Tags are metadata identifiers, not text search — quoting is not valid Obsidian syntax
+		valuePart = condition.value;
 	} else if (operator.exact) {
 		valuePart = `"${condition.value}"`;
 	} else {

@@ -72,6 +72,7 @@ export class QueryBuilderModal extends Modal {
 
 		renderConditionGroup(this.bodyEl, this.model.root, {
 			onChange: () => this.onModelChange(),
+			onValueChange: () => this.schedulePreviewUpdate(),
 			onRemove: () => {}, // root can't be removed
 		}, this.app, 0);
 	}

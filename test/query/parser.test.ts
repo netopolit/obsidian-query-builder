@@ -1,5 +1,6 @@
 import { parseQuery } from "../../src/query/parser";
 import { serialize } from "../../src/query/serializer";
+import { getField } from "../../src/query/fields";
 import { QueryFieldId, OperatorId, Condition, ConditionGroup } from "../../src/types";
 
 function firstCondition(queryText: string): Condition {
@@ -182,6 +183,28 @@ describe("parser", () => {
 		expect(c.operator).toBe(OperatorId.LessThan);
 		expect(c.propertyName).toBe("priority");
 		expect(c.value).toBe("3");
+	});
+});
+
+describe("parser normalizes unsupported tag operators", () => {
+	test("tag with quoted value parses as IsExactly then downgrades to Contains on serialize", () => {
+		const parsed = parseQuery('tag:"#--Important"');
+		const c = parsed.root.children[0] as Condition;
+		// Parser produces IsExactly for quoted values
+		expect(c.field).toBe(QueryFieldId.Tag);
+		expect(c.operator).toBe(OperatorId.IsExactly);
+		expect(c.value).toBe("#--Important");
+	});
+
+	test("tag quoted value re-serializes without quotes after operator normalization", () => {
+		// Simulate what the UI does when it validates the operator on render:
+		const parsed = parseQuery('tag:"#--Important"');
+		const c = parsed.root.children[0] as Condition;
+		const field = getField(c.field);
+		if (!field.allowedOperators.includes(c.operator)) {
+			c.operator = field.allowedOperators[0];
+		}
+		expect(serialize(parsed)).toBe("tag:#--Important");
 	});
 });
 

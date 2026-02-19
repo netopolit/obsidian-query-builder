@@ -87,6 +87,20 @@ describe("serializer", () => {
 		expect(serialize(m)).toBe("tag:#work");
 	});
 
+	test("tag with IsExactly operator still produces unquoted output", () => {
+		const m = model(group({}, [
+			cond({ field: QueryFieldId.Tag, operator: OperatorId.IsExactly, value: "#work" }),
+		]));
+		expect(serialize(m)).toBe("tag:#work");
+	});
+
+	test("tag value with spaces produces unquoted output", () => {
+		const m = model(group({}, [
+			cond({ field: QueryFieldId.Tag, value: "#my tag" }),
+		]));
+		expect(serialize(m)).toBe("tag:#my tag");
+	});
+
 	test("multiple AND conditions", () => {
 		const m = model(group({}, [
 			cond({ field: QueryFieldId.Tag, value: "#work" }),

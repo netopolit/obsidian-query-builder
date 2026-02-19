@@ -9,6 +9,7 @@ export function generateId(): string {
 
 export interface GroupCallbacks {
 	onChange: () => void;
+	onValueChange: () => void;
 	onRemove: (id: string) => void;
 }
 
@@ -48,32 +49,28 @@ export function renderConditionGroup(
 	// Group header
 	const header = container.createDiv({ cls: "qb-group-header" });
 
-	// AND/OR toggle
+	// AND/OR/NOT toggle (mutually exclusive)
 	const toggle = header.createDiv({ cls: "qb-connector-toggle" });
 	const andBtn = toggle.createEl("button", { cls: "qb-toggle-btn", text: "AND" });
 	const orBtn = toggle.createEl("button", { cls: "qb-toggle-btn", text: "OR" });
-	updateToggleState(andBtn, orBtn, group.connector);
+	const notBtn = toggle.createEl("button", { cls: "qb-toggle-btn", text: "NOT" });
+	updateToggleState(andBtn, orBtn, notBtn, group.connector, group.negated);
 
 	andBtn.addEventListener("click", () => {
 		group.connector = "AND";
-		updateToggleState(andBtn, orBtn, group.connector);
+		group.negated = false;
+		updateToggleState(andBtn, orBtn, notBtn, group.connector, group.negated);
 		callbacks.onChange();
 	});
 	orBtn.addEventListener("click", () => {
 		group.connector = "OR";
-		updateToggleState(andBtn, orBtn, group.connector);
+		group.negated = false;
+		updateToggleState(andBtn, orBtn, notBtn, group.connector, group.negated);
 		callbacks.onChange();
 	});
-
-	// NOT toggle
-	const notBtn = header.createEl("button", {
-		cls: "qb-btn qb-not-toggle",
-		text: "NOT",
-	});
-	notBtn.toggleClass("qb-not-toggle--active", group.negated);
 	notBtn.addEventListener("click", () => {
-		group.negated = !group.negated;
-		notBtn.toggleClass("qb-not-toggle--active", group.negated);
+		group.negated = true;
+		updateToggleState(andBtn, orBtn, notBtn, group.connector, group.negated);
 		callbacks.onChange();
 	});
 
@@ -127,6 +124,7 @@ function renderChildren(
 		if (child.type === "condition") {
 			renderConditionRow(childrenEl, child, {
 				onChange: callbacks.onChange,
+				onValueChange: callbacks.onValueChange,
 				onRemove: (id) => {
 					group.children = group.children.filter(c => c.id !== id);
 					callbacks.onChange();
@@ -135,6 +133,7 @@ function renderChildren(
 		} else {
 			renderConditionGroup(childrenEl, child, {
 				onChange: callbacks.onChange,
+				onValueChange: callbacks.onValueChange,
 				onRemove: (id) => {
 					group.children = group.children.filter(c => c.id !== id);
 					callbacks.onChange();
@@ -144,7 +143,14 @@ function renderChildren(
 	}
 }
 
-function updateToggleState(andBtn: HTMLButtonElement, orBtn: HTMLButtonElement, connector: LogicalConnector): void {
-	andBtn.toggleClass("qb-toggle-btn--active", connector === "AND");
-	orBtn.toggleClass("qb-toggle-btn--active", connector === "OR");
+function updateToggleState(
+	andBtn: HTMLButtonElement,
+	orBtn: HTMLButtonElement,
+	notBtn: HTMLButtonElement,
+	connector: LogicalConnector,
+	negated: boolean,
+): void {
+	andBtn.toggleClass("qb-toggle-btn--active", connector === "AND" && !negated);
+	orBtn.toggleClass("qb-toggle-btn--active", connector === "OR" && !negated);
+	notBtn.toggleClass("qb-toggle-btn--active", negated);
 }
